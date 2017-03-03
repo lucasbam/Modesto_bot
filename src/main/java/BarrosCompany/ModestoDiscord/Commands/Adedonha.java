@@ -6,7 +6,6 @@ import sx.blah.discord.handle.obj.IMessage;
 
 public class Adedonha implements IComando {
 
-	@Override
 	public void Executar(IMessage msg) {
 		MensageHandler.enviarMensagem("Adedonha.", msg);
 

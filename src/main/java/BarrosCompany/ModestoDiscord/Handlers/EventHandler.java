@@ -72,7 +72,6 @@ public class EventHandler {
 			   final Method m = c.getDeclaredMethod("Executar", IMessage.class);
 	
 			   Runnable e = new Runnable(){
-				   @Override
 				   public void run(){
 					   try{
 						   m.invoke(o, message);
