@@ -11,10 +11,15 @@ public class DescubraLol implements IComando {
 	jDescubraLol instancia = null;
 	
 	public void Executar(IMessage msg) {		
-		if(instancia == null)
+		if(instancia == null){
 			instancia = new jDescubraLol(msg, this);
-		else
-			MensageHandler.enviarMensagem("Ja existe um jogo", msg);
+			playerId = msg.getAuthor().getID();
+		}else
+			if(msg.getAuthor().getID() == playerId)
+				MensageHandler.enviarMensagem("Ja existe um jogo", msg);
+			else{
+				new DescubraLol().Executar(msg);
+			}
 	}
 	
 	public void setInstanciaNull(){
