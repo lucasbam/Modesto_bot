@@ -7,6 +7,7 @@ import BarrosCompany.ModestoDiscord.Handlers.MensageHandler;
 import BarrosCompany.ModestoDiscord.Interfaces.IComando;
 import BarrosCompany.ModestoDiscord.Interfaces.IJogo;
 import BarrosCompany.ModestoDiscord.Jogos.jDescubraLol;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 
 public class DescubraLol implements IComando, IJogo {
@@ -17,7 +18,7 @@ public class DescubraLol implements IComando, IJogo {
 		
 		if(msg.getContent().split(" ").length > 1){
 			if (msg.getContent().substring(4).equals("quit")){
-				quitarJogo(idJogo, msg);
+				quitarJogo(idJogo, msg.getChannel());
 				return;
 			}
 			else
@@ -33,11 +34,11 @@ public class DescubraLol implements IComando, IJogo {
 		}
 	}
 	
-	public void quitarJogo(String idJogo, IMessage m){
+	public void quitarJogo(String idJogo, IChannel ch){
 		for (int i = 0; i < listaDeJogos.size(); i++) {
 			if(listaDeJogos.get(i).equals(idJogo)){
 				listaDeJogos.remove(i);
-				MensageHandler.enviarMensagem("Jogo encerrado com sucesso.", m);
+				MensageHandler.enviarMensagem("Jogo encerrado com sucesso.", ch);
 			}
 		}
 	}

@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import BarrosCompany.ModestoDiscord.ModestoBot;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.util.DiscordException;
 import sx.blah.discord.util.EmbedBuilder;
@@ -17,6 +18,17 @@ public class MensageHandler {
 	public static void enviarMensagem(String resposta, IMessage message){
 		try {
 			message.getChannel().sendMessage(resposta);
+		} catch (MissingPermissionsException e) {
+			e.printStackTrace();
+		} catch (RateLimitException e) {
+			e.printStackTrace();
+		} catch (DiscordException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void enviarMensagem(String resposta, IChannel ch){
+		try {
+			ch.sendMessage(resposta);
 		} catch (MissingPermissionsException e) {
 			e.printStackTrace();
 		} catch (RateLimitException e) {
