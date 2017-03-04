@@ -42,7 +42,11 @@ public class MensageHandler {
 	}
 	
 	public static void erroJogoAcontecendo(IMessage msg){
-		enviarMsgEstilizada("Erro!", "Um jogo já está acontecendo!", Color.RED, msg);
+		enviarMsgEstilizada("Erro!", "Você já está em um jogo. Se esse não for o caso, digite %[comandodojogo] quit (ex. %dc quit)!", Color.RED, msg);
+	}
+	
+	public static void erroComandoInvalido(IMessage msg){
+		enviarMsgEstilizada("Erro!", "Comando inválido!", Color.RED, msg);
 	}
 	
 	
