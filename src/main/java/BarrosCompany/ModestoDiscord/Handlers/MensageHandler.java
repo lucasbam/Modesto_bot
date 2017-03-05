@@ -53,6 +53,21 @@ public class MensageHandler {
 		return m;
 	}
 	
+	public static IMessage enviarMsgEstilizada(String titulo, String corpo, Color cor, IChannel ch){
+		EmbedObject eb = new EmbedBuilder().withColor(cor).withTitle(titulo).withDesc(corpo).build();
+		IMessage m = null;
+		RequestBuffer.request(() -> {
+			try{
+				IMessage x = new MessageBuilder(ModestoBot.Bot).withChannel(ch).withEmbed(eb).build();
+				return x;
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			return m;
+		});
+		return m;
+	}
+	
 	public static void erroJogoAcontecendo(IMessage msg){
 		enviarMsgEstilizada("Erro!", "Você já está em um jogo. Se esse não for o caso, digite %[comandodojogo] quit (ex. %dc quit)!", Color.RED, msg);
 	}
