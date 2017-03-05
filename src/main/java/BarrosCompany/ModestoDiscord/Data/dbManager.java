@@ -11,7 +11,7 @@ public class dbManager {
 	
 	public dbManager() {
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://db4free.net/botmodesto?autoReconnect=true&useSSL=false", "lukketz", "fodase123");
+			con = DriverManager.getConnection("jdbc:mysql://mysql4.gear.host/botmodesto?autoReconnect=true&useSSL=false", "botmodesto", "Lw6Imk!w?yjS");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
