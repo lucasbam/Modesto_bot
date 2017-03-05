@@ -19,6 +19,7 @@
 			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
+  	
   	<dependencies>
   		<dependency>
     		<groupId>com.google.code.gson</groupId>
@@ -35,6 +36,11 @@
 	 		<groupId>com.github.austinv11</groupId>
 	  		<artifactId>Discord4j</artifactId>
 	  		<version>2.7.0</version>
+		</dependency>
+		<dependency>
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+    		<version>5.1.40</version>
 		</dependency>
   	</dependencies>	
   

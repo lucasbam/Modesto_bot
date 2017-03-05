@@ -19,16 +19,17 @@ public class DescubraLol implements IComando, IJogo {
 		if(msg.getContent().split(" ").length > 1){
 			if (msg.getContent().substring(4).equals("quit")){
 				quitarJogo(idJogo, msg.getChannel());
-				return;
 			}
-			else
+			else{
 				MensageHandler.erroComandoInvalido(msg);
+			}
+			return;
 		}
 		
 		if(GameInstanceHandler.podeIniciarJogo(msg, listaDeJogos)){
 			listaDeJogos.add(msg.getAuthor().getID()+","+msg.getGuild().getID());
 			new jDescubraLol(msg, this);
-	}
+		}
 		else{
 			MensageHandler.erroJogoAcontecendo(msg);
 		}
