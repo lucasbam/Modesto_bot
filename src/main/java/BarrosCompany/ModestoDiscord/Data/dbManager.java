@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class dbManager {
-	Connection con;
+	static Connection con;
 	
 	public dbManager() {
 		try {
@@ -147,7 +147,7 @@ public class dbManager {
 		
 		return 0;
 	}
-	public void excluirInstancia(String playerId, String guildaId, String tabela) {
+	public static void excluirInstancia(String playerId, String guildaId, String tabela) {
 		String query = "DELETE FROM "+ tabela + " WHERE id = ? AND guilda = ?";
 		PreparedStatement stmt;
 		try {

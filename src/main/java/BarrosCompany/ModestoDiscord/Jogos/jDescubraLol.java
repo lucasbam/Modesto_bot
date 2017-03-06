@@ -83,18 +83,8 @@ public class jDescubraLol {
 	public void onMessageEvent(MessageReceivedEvent event){
 		IMessage msg = event.getMessage();
 		
-		if(msg.getContent().startsWith("%dc")){
-			if(msg.getContent().split(" ").length > 1){
-				if (msg.getContent().substring(4).equals("quit")){
-					db.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
-					return;
-			}
-			else{
-				MensageHandler.erroComandoInvalido(msg);
-				return;
-				}
-			}
-		}
+		if(msg.getContent().startsWith("%dc"))
+			return;
 		
 		if(!(msg.getAuthor().getID().equals(playerId))){
 			System.out.println("Não identificando como o player.");
