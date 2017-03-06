@@ -28,26 +28,7 @@ public class jDescubraLol {
 		Channel = msg.getChannel();
 		playerId = msg.getAuthor().getID();
 		guildaId = msg.getGuild().getID();
-		
-//		db = new dbManager();
-		
-		if(msg.getContent().split(" ").length > 1){
-			if (msg.getContent().substring(4).equals("quit")){
-				dbManager.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
-				return;
-			}
-			else{
-				MensageHandler.erroComandoInvalido(msg);
-				return;
-			}
-		}
-		
-		if(!dbManager.existeInstancia(playerId, guildaId, "descubraLol_instancias")){
-			dbManager.criarInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
-		}else{
-			MensageHandler.enviarMensagem("Erro, jogo já existe!", msg);
-			return;
-		}
+
 		
 		if(!dbManager.existeRegistro(playerId, "descubraLol_progresso", "id"))
 			dbManager.criarJogo(playerId, "descubraLol_progresso");

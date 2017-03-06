@@ -24,7 +24,13 @@ public class DescubraLol implements IComando, IJogo {
 			}
 		}
 		
-		ModestoBot.Bot.getDispatcher().registerListener(new jDescubraLol(msg, this));
+		if(!dbManager.existeInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias")){
+			dbManager.criarInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
+			ModestoBot.Bot.getDispatcher().registerListener(new jDescubraLol(msg, this));
+		}else{
+			MensageHandler.enviarMensagem("Erro, jogo já existe!", msg);
+			return;
+		}
 	}
 	
 	public void quitarJogo(String playerId, String guildaId){
