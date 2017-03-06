@@ -15,7 +15,7 @@ import sx.blah.discord.util.MissingPermissionsException;
 import sx.blah.discord.util.RateLimitException;
 
 public class jDescubraLol {
-	dbManager db;
+//	dbManager db;
 	String Resposta;
 	DescubraLol Instancia;
 	int currentLevel;
@@ -29,11 +29,11 @@ public class jDescubraLol {
 		playerId = msg.getAuthor().getID();
 		guildaId = msg.getGuild().getID();
 		
-		db = new dbManager();
+//		db = new dbManager();
 		
 		if(msg.getContent().split(" ").length > 1){
 			if (msg.getContent().substring(4).equals("quit")){
-				db.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
+				dbManager.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
 				return;
 			}
 			else{
@@ -42,16 +42,16 @@ public class jDescubraLol {
 			}
 		}
 		
-		if(!db.existeInstancia(playerId, guildaId, "descubraLol_instancias")){
-			db.criarInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
+		if(!dbManager.existeInstancia(playerId, guildaId, "descubraLol_instancias")){
+			dbManager.criarInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
 		}else{
 			MensageHandler.enviarMensagem("Erro, jogo já existe!", msg);
 			return;
 		}
 		
-		if(!db.existeRegistro(playerId, "descubraLol_progresso", "id"))
-			db.criarJogo(playerId, "descubraLol_progresso");
-		currentLevel = db.loadGame(playerId, "descubraLol_progresso");
+		if(!dbManager.existeRegistro(playerId, "descubraLol_progresso", "id"))
+			dbManager.criarJogo(playerId, "descubraLol_progresso");
+		currentLevel = dbManager.loadGame(playerId, "descubraLol_progresso");
 		
 		if(currentLevel == 0){
 			MensageHandler.enviarMsgEstilizada("Descubra o campeão", "Bem-vindo! Seu objetivo é adivinhar qual o personagem do League of Legends o bot quis representar a partir de emojis padrões do Discord.", Color.YELLOW, msg);
@@ -62,7 +62,7 @@ public class jDescubraLol {
 	}
 
 	private void mostrarLevel(IUser usuario) {
-		String representacao = db.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
+		String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
 		MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
 	}
 	
@@ -92,7 +92,7 @@ public class jDescubraLol {
 		}
 		if(msg.getAuthor().isBot())
 			return;
-		if(!db.existeInstancia(playerId, guildaId, "descubraLol_instancias")){
+		if(!dbManager.existeInstancia(playerId, guildaId, "descubraLol_instancias")){
 			System.out.println("Sugere que não existe jogo.");
 			return;
 		}
@@ -112,10 +112,10 @@ public class jDescubraLol {
 	}
 	
 	public void salvarJogo(){
-		db.setInt(playerId, "descubraLol_progresso", "currentLevel", currentLevel);
+		dbManager.setInt(playerId, "descubraLol_progresso", "currentLevel", currentLevel);
 	}
 	
 	private void setResposta(){
-		Resposta = db.pesquisarString(currentLevel, "descubraLol_champions", "nome");
+		Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
 	}
 }

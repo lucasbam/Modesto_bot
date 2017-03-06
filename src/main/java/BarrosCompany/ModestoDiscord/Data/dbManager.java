@@ -16,7 +16,7 @@ public class dbManager {
 			e.printStackTrace();
 		}
 	}
-	public String pesquisarString(int id, String tabela, String string){
+	public static String pesquisarString(int id, String tabela, String string){
 		String query = "SELECT * FROM "+ tabela +" WHERE id = ?";
 		PreparedStatement stmt;
 		try {
@@ -45,7 +45,7 @@ public class dbManager {
 		}
 	}
 	
-	public void setInt(String id, String tabela, String coluna, int i){
+	public static void setInt(String id, String tabela, String coluna, int i){
 		String query = "UPDATE " + tabela + " SET " + coluna + "=" + i + " WHERE id = ?";
 		PreparedStatement stmt;
 		try {
@@ -57,7 +57,7 @@ public class dbManager {
 			e.printStackTrace();
 		}
 	}
-	public void criarInstancia(String playerId, String guildaId, String tabela){
+	public static void criarInstancia(String playerId, String guildaId, String tabela){
 		String query = "INSERT INTO "+ tabela + "(id, guilda) VALUES(?,?)";
 		PreparedStatement stmt;
 		try {
@@ -71,7 +71,7 @@ public class dbManager {
 		}
 	}
 	
-	public boolean existeInstancia(String playerId, String guildaId, String tabela){
+	public static boolean existeInstancia(String playerId, String guildaId, String tabela){
 		try {
 			String query = "SELECT COUNT(*) AS total FROM " + tabela + " WHERE id = ? AND guilda = ?";
 			PreparedStatement stmt = con.prepareStatement(query);
@@ -95,7 +95,7 @@ public class dbManager {
 		return false;
 	}
 	
-	public boolean existeRegistro(String id, String tabela, String valor){
+	public static boolean existeRegistro(String id, String tabela, String valor){
 		try {
 			String query = "SELECT COUNT(1) FROM " + tabela + " WHERE " + valor + " = ?";
 			PreparedStatement stmt = con.prepareStatement(query);
@@ -117,7 +117,7 @@ public class dbManager {
 		return false;
 	}
 
-	public void criarJogo(String playerId, String tabela) {
+	public static void criarJogo(String playerId, String tabela) {
 		String query = "INSERT INTO "+ tabela + "(id, currentLevel) VALUES(?,?)";
 		PreparedStatement stmt;
 		try {
@@ -131,7 +131,7 @@ public class dbManager {
 		}
 	}
 
-	public int loadGame(String playerId, String tabela){
+	public static int loadGame(String playerId, String tabela){
 		System.out.println("Tá chegando no load!");
 		String query = "SELECT * FROM "+ tabela +" WHERE id = ?";
 		PreparedStatement stmt;

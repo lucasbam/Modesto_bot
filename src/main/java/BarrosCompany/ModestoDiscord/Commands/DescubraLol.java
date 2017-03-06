@@ -11,7 +11,6 @@ import sx.blah.discord.handle.obj.IMessage;
 public class DescubraLol implements IComando, IJogo {
 	
 	public void Executar(IMessage msg) {
-	
 		if(msg.getContent().startsWith("%dc")){
 			if(msg.getContent().split(" ").length > 1){
 				if (msg.getContent().substring(4).equals("quit")){
@@ -24,6 +23,7 @@ public class DescubraLol implements IComando, IJogo {
 				}
 			}
 		}
+		
 		ModestoBot.Bot.getDispatcher().registerListener(new jDescubraLol(msg, this));
 	}
 	
