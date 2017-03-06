@@ -67,6 +67,7 @@ public class jDescubraLol {
 	}
 	
 	private void checarPalpite(String Palpite, IUser usuario){
+		setResposta();
 		if(Palpite.toLowerCase().equals(Resposta)){
 			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel);
 			currentLevel++;
@@ -82,14 +83,16 @@ public class jDescubraLol {
 	public void onMessageEvent(MessageReceivedEvent event){
 		IMessage msg = event.getMessage();
 		
-		if(msg.getContent().split(" ").length > 1){
-			if (msg.getContent().substring(4).equals("quit")){
-				db.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
-				return;
+		if(msg.getContent().startsWith("%dc")){
+			if(msg.getContent().split(" ").length > 1){
+				if (msg.getContent().substring(4).equals("quit")){
+					db.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
+					return;
 			}
 			else{
 				MensageHandler.erroComandoInvalido(msg);
 				return;
+				}
 			}
 		}
 		
