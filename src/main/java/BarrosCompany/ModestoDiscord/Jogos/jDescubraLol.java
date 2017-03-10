@@ -93,8 +93,6 @@ public class jDescubraLol {
 		if(!prepared)
 			return;
 		
-		String palpite = msg.getContent();
-		checarPalpite(palpite, msg.getAuthor());
 		try {
 			msg.delete();
 		} catch (MissingPermissionsException e) {
@@ -104,6 +102,9 @@ public class jDescubraLol {
 		} catch (DiscordException e) {
 			e.printStackTrace();
 		}
+		
+		String palpite = msg.getContent();
+		checarPalpite(palpite, msg.getAuthor());
 	}
 	
 	public void salvarJogo(){
