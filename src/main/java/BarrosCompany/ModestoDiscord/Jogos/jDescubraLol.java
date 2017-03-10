@@ -50,7 +50,7 @@ public class jDescubraLol {
 	}
 
 	private void mostrarLevel(IUser usuario) {
-		if(isJogando()){
+		if(jogando){
 			Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
 			String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
 			MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
@@ -103,7 +103,7 @@ public class jDescubraLol {
 				}
 			}
 		}
-		if(!isJogando())
+		if(!jogando)
 			return;
 		if(!prepared)
 			return;
