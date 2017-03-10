@@ -20,6 +20,7 @@ public class jDescubraLol {
 	DescubraLol Instancia;
 	int currentLevel;
 	int lastLevel;
+	boolean prepared;
 	String playerId;
 	IChannel Channel;
 	String guildaId;
@@ -59,6 +60,7 @@ public class jDescubraLol {
 	private void checarPalpite(String Palpite, IUser usuario){
 		if(Palpite.toLowerCase().equals(Resposta)){
 			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel);
+			prepared = false;
 			passarNivel();
 			salvarJogo();
 			mostrarLevel(usuario);
@@ -78,7 +80,6 @@ public class jDescubraLol {
 		
 		if(msg.getContent().startsWith("%dc"))
 			return;
-		
 		if(!(msg.getAuthor().getID().equals(playerId))){
 			System.out.println("Não identificando como o player.");
 			return;
@@ -89,7 +90,8 @@ public class jDescubraLol {
 			System.out.println("Sugere que não existe jogo.");
 			return;
 		}
-		
+		if(!prepared)
+			return;
 		
 		String palpite = msg.getContent();
 		checarPalpite(palpite, msg.getAuthor());
@@ -111,5 +113,6 @@ public class jDescubraLol {
 	private void setResposta(){
 		Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
 		lastLevel = currentLevel - 1;
+		prepared = true;
 	}
 }
