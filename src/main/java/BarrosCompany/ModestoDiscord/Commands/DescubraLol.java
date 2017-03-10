@@ -14,7 +14,7 @@ public class DescubraLol implements IComando, IJogo {
 		if(msg.getContent().startsWith("%dc")){
 			if(msg.getContent().split(" ").length > 1){
 				if (msg.getContent().substring(4).equals("quit")){
-					dbManager.excluirInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
+					quitarJogo(msg);
 					return;
 			}
 			else{
@@ -25,7 +25,6 @@ public class DescubraLol implements IComando, IJogo {
 		}
 		
 		if(!dbManager.existeInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias")){
-			dbManager.criarInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
 			ModestoBot.Bot.getDispatcher().registerListener(new jDescubraLol(msg, this));
 		}else{
 			MensageHandler.enviarMensagem("Erro, jogo já existe!", msg);
@@ -33,6 +32,11 @@ public class DescubraLol implements IComando, IJogo {
 		}
 	}
 	
+	public void quitarJogo(IMessage msg){
+		dbManager.excluirInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
+	}
+	
 	public void quitarJogo(String playerId, String guildaId){
+		dbManager.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
 	}
 }
