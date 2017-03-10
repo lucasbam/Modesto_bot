@@ -56,13 +56,14 @@ public class jDescubraLol {
 	}
 	
 	private void checarPalpite(String Palpite, IUser usuario){
+		prepared = false;
 		if(Palpite.toLowerCase().equals(Resposta)){
-			prepared = false;
 			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel);
 			passarNivel();
 			mostrarLevel(usuario);
 		}else{
 			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel);
+			prepared = true;
 		}
 	}
 	
@@ -74,7 +75,8 @@ public class jDescubraLol {
 	@EventSubscriber
 	public void onMessageEvent(MessageReceivedEvent event){
 		IMessage msg = event.getMessage();
-		
+		if(msg.getContent().isEmpty())
+			return;
 		if(msg.getContent().startsWith("%dc"))
 			return;
 		if(!(msg.getAuthor().getID().equals(playerId))){
@@ -89,9 +91,10 @@ public class jDescubraLol {
 		}
 		if(!prepared)
 			return;
+		
 		String palpite = msg.getContent();
 		IUser autor = msg.getAuthor();
-		
+		checarPalpite(palpite, autor);
 		try {
 			msg.delete();
 		} catch (MissingPermissionsException e) {
@@ -101,8 +104,6 @@ public class jDescubraLol {
 		} catch (DiscordException e) {
 			e.printStackTrace();
 		}
-		
-		checarPalpite(palpite, autor);
 	}
 	
 	public void salvarJogo(){
