@@ -43,7 +43,6 @@ public class jDescubraLol {
 			MensageHandler.enviarMsgEstilizada("Descubra o campeão", "Bem-vindo! Seu objetivo é adivinhar qual o personagem do League of Legends o bot quis representar a partir de emojis padrões do Discord.", Color.YELLOW, msg);
 		}
 		
-		setResposta();
 		mostrarLevel(msg.getAuthor());
 	}
 
