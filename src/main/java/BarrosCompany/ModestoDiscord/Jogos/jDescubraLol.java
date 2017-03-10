@@ -121,7 +121,7 @@ public class jDescubraLol {
 			e.printStackTrace();
 		}
 	}
-	
+	///
 	public void salvarJogo(){
 		dbManager.setInt(playerId, "descubraLol_progresso", "currentLevel", currentLevel);
 	}
