@@ -92,6 +92,8 @@ public class jDescubraLol {
 		}
 		if(!prepared)
 			return;
+		String palpite = msg.getContent();
+		IUser autor = msg.getAuthor();
 		
 		try {
 			msg.delete();
@@ -103,8 +105,7 @@ public class jDescubraLol {
 			e.printStackTrace();
 		}
 		
-		String palpite = msg.getContent();
-		checarPalpite(palpite, msg.getAuthor());
+		checarPalpite(palpite, autor);
 	}
 	
 	public void salvarJogo(){
