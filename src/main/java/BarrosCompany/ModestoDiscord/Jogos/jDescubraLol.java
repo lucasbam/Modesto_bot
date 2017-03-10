@@ -23,6 +23,7 @@ public class jDescubraLol {
 	String playerId;
 	IChannel Channel;
 	String guildaId;
+	private boolean jogando = true;
 	
 	public jDescubraLol(IMessage msg, DescubraLol i){
 		Instancia = i;
@@ -49,10 +50,12 @@ public class jDescubraLol {
 	}
 
 	private void mostrarLevel(IUser usuario) {
-		Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
-		String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
-		MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
-		prepared = true;
+		if(isJogando()){
+			Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
+			String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
+			MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
+			prepared = true;
+		}
 	}
 	
 	private void checarPalpite(String Palpite, IUser usuario){
@@ -77,8 +80,6 @@ public class jDescubraLol {
 		IMessage msg = event.getMessage();
 		if(msg.getContent().isEmpty())
 			return;
-		if(msg.getContent().startsWith("%dc"))
-			return;
 		if(!(msg.getAuthor().getID().equals(playerId))){
 			System.out.println("Não identificando como o player.");
 			return;
@@ -89,6 +90,21 @@ public class jDescubraLol {
 			System.out.println("Sugere que não existe jogo.");
 			return;
 		}
+		
+		if(msg.getContent().startsWith("%dc")){
+			if(msg.getContent().split(" ").length > 1){
+				if (msg.getContent().substring(4).equals("quit")){
+					Instancia.quitarJogo(msg,this);
+					return;
+			}
+			else{
+				MensageHandler.erroComandoInvalido(msg);
+				return;
+				}
+			}
+		}
+		if(!isJogando())
+			return;
 		if(!prepared)
 			return;
 		
@@ -108,5 +124,13 @@ public class jDescubraLol {
 	
 	public void salvarJogo(){
 		dbManager.setInt(playerId, "descubraLol_progresso", "currentLevel", currentLevel);
+	}
+
+	public boolean isJogando() {
+		return jogando;
+	}
+
+	public void setJogando(boolean jogando) {
+		this.jogando = jogando;
 	}
 }

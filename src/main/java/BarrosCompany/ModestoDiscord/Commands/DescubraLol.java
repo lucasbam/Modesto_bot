@@ -11,19 +11,7 @@ import sx.blah.discord.handle.obj.IMessage;
 public class DescubraLol implements IComando, IJogo {
 	
 	public void Executar(IMessage msg) {
-		if(msg.getContent().startsWith("%dc")){
-			if(msg.getContent().split(" ").length > 1){
-				if (msg.getContent().substring(4).equals("quit")){
-					quitarJogo(msg);
-					return;
-			}
-			else{
-				MensageHandler.erroComandoInvalido(msg);
-				return;
-				}
-			}
-		}
-		
+
 		if(!dbManager.existeInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias")){
 			ModestoBot.Bot.getDispatcher().registerListener(new jDescubraLol(msg, this));
 		}else{
@@ -32,7 +20,9 @@ public class DescubraLol implements IComando, IJogo {
 		}
 	}
 	
-	public void quitarJogo(IMessage msg){
+	public void quitarJogo(IMessage msg, jDescubraLol object){
+		object.setJogando(false);
+		object = null;
 		dbManager.excluirInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
 	}
 	
