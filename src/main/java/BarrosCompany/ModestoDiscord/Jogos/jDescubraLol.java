@@ -19,8 +19,7 @@ public class jDescubraLol {
 	String Resposta;
 	DescubraLol Instancia;
 	int currentLevel;
-	int lastLevel;
-	boolean prepared = true;
+	boolean prepared = false;
 	String playerId;
 	IChannel Channel;
 	String guildaId;
@@ -36,24 +35,24 @@ public class jDescubraLol {
 			dbManager.criarJogo(playerId, "descubraLol_progresso");
 		
 		currentLevel = dbManager.loadGame(playerId, "descubraLol_progresso");
-		lastLevel = currentLevel;
 		dbManager.criarInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
 		
 		if(currentLevel == 0){
 			MensageHandler.enviarMsgEstilizada("Descubra o campeão", "Bem-vindo! Seu objetivo é adivinhar qual o personagem do League of Legends o bot quis representar a partir de emojis padrões do Discord.", Color.YELLOW, msg);
 		}
 		
-		mostrarLevel(msg.getAuthor());
+		iniciarJogo(msg.getAuthor());
+	}
+	
+	private void iniciarJogo(IUser user){
+		mostrarLevel(user);
 	}
 
 	private void mostrarLevel(IUser usuario) {
-		if(currentLevel > lastLevel){
-			String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
-			MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
-		}else{
-			setResposta();
-			mostrarLevel(usuario);
-		}
+		Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
+		String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
+		MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
+		prepared = true;
 	}
 	
 	private void checarPalpite(String Palpite, IUser usuario){
@@ -69,7 +68,6 @@ public class jDescubraLol {
 	
 	private void passarNivel(){
 		currentLevel++;
-		setResposta();
 		salvarJogo();
 	}
 	
@@ -109,11 +107,5 @@ public class jDescubraLol {
 	
 	public void salvarJogo(){
 		dbManager.setInt(playerId, "descubraLol_progresso", "currentLevel", currentLevel);
-	}
-	
-	private void setResposta(){
-		Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
-		lastLevel = currentLevel - 1;
-		prepared = true;
 	}
 }
