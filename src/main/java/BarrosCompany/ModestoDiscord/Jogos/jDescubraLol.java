@@ -20,7 +20,7 @@ public class jDescubraLol {
 	DescubraLol Instancia;
 	int currentLevel;
 	int lastLevel;
-	boolean prepared;
+	boolean prepared = true;
 	String playerId;
 	IChannel Channel;
 	String guildaId;
@@ -59,10 +59,9 @@ public class jDescubraLol {
 	
 	private void checarPalpite(String Palpite, IUser usuario){
 		if(Palpite.toLowerCase().equals(Resposta)){
-			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel);
 			prepared = false;
+			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel);
 			passarNivel();
-			salvarJogo();
 			mostrarLevel(usuario);
 		}else{
 			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel);
@@ -72,6 +71,7 @@ public class jDescubraLol {
 	private void passarNivel(){
 		currentLevel++;
 		setResposta();
+		salvarJogo();
 	}
 	
 	@EventSubscriber
