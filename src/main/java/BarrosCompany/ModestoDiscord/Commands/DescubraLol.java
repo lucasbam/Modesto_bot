@@ -11,7 +11,8 @@ import sx.blah.discord.handle.obj.IMessage;
 public class DescubraLol implements IComando, IJogo {
 	
 	public void Executar(IMessage msg) {
-
+		if(msg.getContent().split(" ").length > 1)
+			return;
 		if(!dbManager.existeInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias")){
 			ModestoBot.Bot.getDispatcher().registerListener(new jDescubraLol(msg, this));
 		}else{
