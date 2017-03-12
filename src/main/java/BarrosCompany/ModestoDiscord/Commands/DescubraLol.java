@@ -23,8 +23,6 @@ public class DescubraLol implements IComando, IJogo {
 	
 	public void quitarJogo(IMessage msg, jDescubraLol object){
 		object.setJogando(false);
-		System.out.println(object.isJogando());
-		object = null;
 		dbManager.excluirInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
 	}
 	

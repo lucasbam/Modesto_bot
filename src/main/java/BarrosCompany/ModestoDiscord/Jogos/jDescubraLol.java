@@ -2,6 +2,7 @@ package BarrosCompany.ModestoDiscord.Jogos;
 
 import java.awt.Color;
 
+import BarrosCompany.ModestoDiscord.ModestoBot;
 import BarrosCompany.ModestoDiscord.Commands.DescubraLol;
 import BarrosCompany.ModestoDiscord.Data.dbManager;
 import BarrosCompany.ModestoDiscord.Handlers.MensageHandler;
@@ -94,7 +95,8 @@ public class jDescubraLol {
 		if(msg.getContent().startsWith("%dc")){
 			if(msg.getContent().split(" ").length > 1){
 				if (msg.getContent().substring(4).equals("quit")){
-					Instancia.quitarJogo(msg,this);
+					Instancia.quitarJogo(playerId, guildaId);
+					ModestoBot.Bot.getDispatcher().unregisterListener(this);
 					return;
 			}
 			else{
