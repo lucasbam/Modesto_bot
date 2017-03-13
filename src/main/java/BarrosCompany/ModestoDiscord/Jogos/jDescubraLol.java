@@ -58,11 +58,11 @@ public class jDescubraLol {
 	private void checarPalpite(String Palpite, IUser usuario){
 		prepared = false;
 		if(Palpite.toLowerCase().equals(Resposta)){
-			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel, 2000);
+			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel);
 			passarNivel();
 			mostrarNivel(usuario);
 		}else{
-			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel, 3000);
+			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel);
 			prepared = true;
 		}
 	}
