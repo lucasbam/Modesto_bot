@@ -6,6 +6,7 @@ import BarrosCompany.ModestoDiscord.Handlers.MensageHandler;
 import BarrosCompany.ModestoDiscord.Interfaces.IComando;
 import BarrosCompany.ModestoDiscord.Interfaces.IJogo;
 import BarrosCompany.ModestoDiscord.Jogos.jDescubraLol;
+import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 
 public class DescubraLol implements IComando, IJogo {
@@ -28,5 +29,6 @@ public class DescubraLol implements IComando, IJogo {
 	
 	public void quitarJogo(String playerId, String guildaId){
 		dbManager.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
+		
 	}
 }

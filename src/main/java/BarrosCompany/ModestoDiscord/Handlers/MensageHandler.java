@@ -1,6 +1,7 @@
 package BarrosCompany.ModestoDiscord.Handlers;
 
 import java.awt.Color;
+import java.util.concurrent.TimeUnit;
 
 import BarrosCompany.ModestoDiscord.ModestoBot;
 import sx.blah.discord.api.internal.json.objects.EmbedObject;
@@ -55,10 +56,36 @@ public class MensageHandler {
 	
 	public static IMessage enviarMsgEstilizada(String titulo, String corpo, Color cor, IChannel ch){
 		EmbedObject eb = new EmbedBuilder().withColor(cor).withTitle(titulo).withDesc(corpo).build();
+		try {
+			return new MessageBuilder(ModestoBot.Bot).withChannel(ch).withEmbed(eb).build();
+		} catch (RateLimitException e1) {
+			e1.printStackTrace();
+		} catch (DiscordException e1) {
+			e1.printStackTrace();
+		} catch (MissingPermissionsException e1) {
+			e1.printStackTrace();
+		}
+//		RequestBuffer.request(() -> {
+//			try{
+//				System.out.println("antes do return");
+//				return new MessageBuilder(ModestoBot.Bot).withChannel(ch).withEmbed(eb).build();
+//			}catch(Exception e){
+//				e.printStackTrace();
+//			}
+//			return null;
+//		});
+//		return null;
+		System.out.println("Ta passando");
+		return null;
+	}
+	public static IMessage enviarMsgEstilizada(String titulo, String corpo, Color cor, IChannel ch, int delay){
+		EmbedObject eb = new EmbedBuilder().withColor(cor).withTitle(titulo).withDesc(corpo).build();
 		IMessage m = null;
 		RequestBuffer.request(() -> {
 			try{
 				IMessage x = new MessageBuilder(ModestoBot.Bot).withChannel(ch).withEmbed(eb).build();
+				Thread.sleep(delay);
+				x.delete();
 				return x;
 			}catch(Exception e){
 				e.printStackTrace();
@@ -67,13 +94,24 @@ public class MensageHandler {
 		});
 		return m;
 	}
-	
 	public static void erroJogoAcontecendo(IMessage msg){
 		enviarMsgEstilizada("Erro!", "Você já está em um jogo. Se esse não for o caso, digite %[comandodojogo] quit (ex. %dc quit)!", Color.RED, msg);
 	}
 	
 	public static void erroComandoInvalido(IMessage msg){
 		enviarMsgEstilizada("Erro!", "Comando inválido!", Color.RED, msg);
+	}
+	
+	public static void excluirMensagem(IMessage msg){
+		try {
+			msg.delete();
+		} catch (MissingPermissionsException e) {
+			e.printStackTrace();
+		} catch (RateLimitException e) {
+			e.printStackTrace();
+		} catch (DiscordException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

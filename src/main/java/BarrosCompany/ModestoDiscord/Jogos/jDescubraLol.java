@@ -1,6 +1,8 @@
 package BarrosCompany.ModestoDiscord.Jogos;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import BarrosCompany.ModestoDiscord.ModestoBot;
 import BarrosCompany.ModestoDiscord.Commands.DescubraLol;
@@ -11,27 +13,22 @@ import sx.blah.discord.handle.impl.events.MessageReceivedEvent;
 import sx.blah.discord.handle.obj.IChannel;
 import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
-import sx.blah.discord.util.DiscordException;
-import sx.blah.discord.util.MissingPermissionsException;
-import sx.blah.discord.util.RateLimitException;
 
 public class jDescubraLol {
 //	dbManager db;
-	String Resposta;
+	String Resposta, playerId, guildaId;
+	boolean prepared = false, jogando = true;
 	DescubraLol Instancia;
-	int currentLevel;
-	boolean prepared = false;
-	String playerId;
 	IChannel Channel;
-	String guildaId;
-	private boolean jogando = true;
+	int currentLevel;
+	//ArrayList<IMessage> mensagens = new ArrayList<IMessage>();
+	IMessage ultimoChampion;
 	
 	public jDescubraLol(IMessage msg, DescubraLol i){
 		Instancia = i;
 		Channel = msg.getChannel();
 		playerId = msg.getAuthor().getID();
 		guildaId = msg.getGuild().getID();
-
 		
 		if(!dbManager.existeRegistro(playerId, "descubraLol_progresso", "id"))
 			dbManager.criarJogo(playerId, "descubraLol_progresso");
@@ -43,18 +40,17 @@ public class jDescubraLol {
 			MensageHandler.enviarMsgEstilizada("Descubra o campeão", "Bem-vindo! Seu objetivo é adivinhar qual o personagem do League of Legends o bot quis representar a partir de emojis padrões do Discord.", Color.YELLOW, msg);
 		}
 		
-		iniciarJogo(msg.getAuthor());
-	}
-	
-	private void iniciarJogo(IUser user){
-		mostrarLevel(user);
+		mostrarNivel(msg.getAuthor());
 	}
 
-	private void mostrarLevel(IUser usuario) {
+	private void mostrarNivel(IUser usuario) {
+		if(ultimoChampion != null)
+			MensageHandler.excluirMensagem(ultimoChampion);
 		if(jogando){
 			Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
 			String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
-			MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
+			ultimoChampion = MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
+			System.out.println("ultimochampion:"+ultimoChampion);
 			prepared = true;
 		}
 	}
@@ -62,11 +58,11 @@ public class jDescubraLol {
 	private void checarPalpite(String Palpite, IUser usuario){
 		prepared = false;
 		if(Palpite.toLowerCase().equals(Resposta)){
-			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel);
+			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel, 2000);
 			passarNivel();
-			mostrarLevel(usuario);
+			mostrarNivel(usuario);
 		}else{
-			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel);
+			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel, 3000);
 			prepared = true;
 		}
 	}
@@ -79,20 +75,24 @@ public class jDescubraLol {
 	@EventSubscriber
 	public void onMessageEvent(MessageReceivedEvent event){
 		IMessage msg = event.getMessage();
+		
 		if(msg.getContent().isEmpty())
 			return;
+		
 		if(!(msg.getAuthor().getID().equals(playerId))){
 			System.out.println("Não identificando como o player.");
 			return;
 		}
+		
 		if(msg.getAuthor().isBot())
 			return;
+		
 		if(!dbManager.existeInstancia(playerId, guildaId, "descubraLol_instancias")){
 			System.out.println("Sugere que não existe jogo.");
 			return;
 		}
 		
-		if(msg.getContent().startsWith("%dc")){
+		if(msg.getContent().toLowerCase().startsWith("%dc")){
 			if(msg.getContent().split(" ").length > 1){
 				if (msg.getContent().substring(4).equals("quit")){
 					Instancia.quitarJogo(playerId, guildaId);
@@ -113,15 +113,7 @@ public class jDescubraLol {
 		String palpite = msg.getContent();
 		IUser autor = msg.getAuthor();
 		checarPalpite(palpite, autor);
-		try {
-			msg.delete();
-		} catch (MissingPermissionsException e) {
-			e.printStackTrace();
-		} catch (RateLimitException e) {
-			e.printStackTrace();
-		} catch (DiscordException e) {
-			e.printStackTrace();
-		}
+		MensageHandler.excluirMensagem(msg);
 	}
 	///
 	public void salvarJogo(){
@@ -135,4 +127,5 @@ public class jDescubraLol {
 	public void setJogando(boolean jogando) {
 		this.jogando = jogando;
 	}
+
 }
