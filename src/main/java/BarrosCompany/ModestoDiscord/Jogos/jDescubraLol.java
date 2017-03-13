@@ -47,7 +47,6 @@ public class jDescubraLol {
 			Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
 			String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
 			ultimoChampion = MensageHandler.enviarMsgEstilizada("@"+usuario.getName()+" CAMPEÃO "+ currentLevel, representacao, Color.DARK_GRAY, Channel);
-			System.out.println("ultimochampion:"+ultimoChampion);
 			prepared = true;
 		}
 	}
@@ -55,12 +54,24 @@ public class jDescubraLol {
 	private void checarPalpite(String Palpite, IUser usuario){
 		prepared = false;
 		if(Palpite.toLowerCase().equals(Resposta)){
-			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel, 0);
+			Thread t = new Thread(new Runnable() {
+				@Override
+				public void run() {
+			    	MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel, 2000);
+			    }
+			});
+			t.start();
 			passarNivel();
 			mostrarNivel(usuario);
 		}else{
+			Thread t = new Thread(new Runnable() {
+			    @Override
+				public void run() {
+			    	MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel, 4000);
+			    }
+			});
+			t.start();
 			prepared = true;
-			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel, 100);
 		}
 	}
 	

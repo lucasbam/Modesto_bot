@@ -79,7 +79,6 @@ public class dbManager {
 			stmt.setString(2, guildaId);
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
-			System.out.println(rs.getInt("total"));
 			if(rs.getInt("total") > 0){
 				stmt.close();
 				rs.close();

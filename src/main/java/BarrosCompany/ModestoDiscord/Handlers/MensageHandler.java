@@ -75,7 +75,6 @@ public class MensageHandler {
 //			return null;
 //		});
 //		return null;
-		System.out.println("Ta passando");
 		return null;
 	}
 	public static IMessage enviarMsgEstilizada(String titulo, String corpo, Color cor, IChannel ch, int delay){
