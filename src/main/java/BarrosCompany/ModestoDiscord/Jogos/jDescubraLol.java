@@ -1,9 +1,6 @@
 package BarrosCompany.ModestoDiscord.Jogos;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
 import BarrosCompany.ModestoDiscord.ModestoBot;
 import BarrosCompany.ModestoDiscord.Commands.DescubraLol;
 import BarrosCompany.ModestoDiscord.Data.dbManager;
@@ -58,11 +55,11 @@ public class jDescubraLol {
 	private void checarPalpite(String Palpite, IUser usuario){
 		prepared = false;
 		if(Palpite.toLowerCase().equals(Resposta)){
-			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel);
+			MensageHandler.enviarMsgEstilizada("@"+usuario.getName(), "Correto!", Color.GREEN, Channel, 0);
 			passarNivel();
 			mostrarNivel(usuario);
 		}else{
-			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel);
+			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel,0);
 			prepared = true;
 		}
 	}
