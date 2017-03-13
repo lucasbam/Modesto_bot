@@ -60,7 +60,7 @@ public class jDescubraLol {
 			mostrarNivel(usuario);
 		}else{
 			prepared = true;
-			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel, 3000);
+			MensageHandler.enviarMsgEstilizada("Oops!", "Resposta errada.", Color.RED, Channel, 100);
 		}
 	}
 	
