@@ -132,7 +132,7 @@ public class jDescubraLol {
 					Thread t = new Thread(new Runnable() {
 						@Override
 						public void run() {
-							double x = currentLevel-championIniciado;
+							int x = currentLevel-championIniciado;
 					    	MensageHandler.enviarMsgEstilizada("Encerrado com sucesso.", "Você tentou " + tentativasDaSessao + " palpites e acertou" + x + " campeões.", Color.WHITE, Channel, 4000);
 					    }
 					});
