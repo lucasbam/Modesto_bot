@@ -38,7 +38,7 @@ public class jDescubraLol {
 		if(currentLevel == 0)
 			MensageHandler.enviarMsgEstilizada("Descubra o campeão", "Bem-vindo! Seu objetivo é adivinhar qual o personagem do League of Legends o bot quis representar a partir de emojis padrões do Discord.", Color.YELLOW, msg);
 		
-		double maxChampionId = dbManager.getMaxValue("descubraLol_champions", "id");
+		int maxChampionId = dbManager.getMaxValue("descubraLol_champions", "id");
 		if (currentLevel > maxChampionId){
 			ModestoBot.Bot.getDispatcher().unregisterListener(this);
 			MensageHandler.enviarMsgEstilizada("@"+msg.getAuthor().getName(), 
@@ -133,7 +133,7 @@ public class jDescubraLol {
 						@Override
 						public void run() {
 							int x = currentLevel-championIniciado;
-					    	MensageHandler.enviarMsgEstilizada("Encerrado com sucesso.", "Você tentou " + tentativasDaSessao + " palpites e acertou" + x + " campeões.", Color.WHITE, Channel, 4000);
+					    	MensageHandler.enviarMsgEstilizada("Encerrado com sucesso.", "Você tentou " + tentativasDaSessao + " palpites e acertou " + x + " campeões.", Color.WHITE, Channel, 4000);
 					    }
 					});
 					if(tentativasDaSessao > 0)
