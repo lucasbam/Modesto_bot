@@ -39,7 +39,7 @@ public class jDescubraLol {
 			MensageHandler.enviarMsgEstilizada("Descubra o campeão", "Bem-vindo! Seu objetivo é adivinhar qual o personagem do League of Legends o bot quis representar a partir de emojis padrões do Discord.", Color.YELLOW, msg);
 		
 		double maxChampionId = dbManager.getMaxValue("descubraLol_champions", "id");
-		if (currentLevel == maxChampionId){
+		if (currentLevel > maxChampionId){
 			ModestoBot.Bot.getDispatcher().unregisterListener(this);
 			double x = (maxChampionId/tentativasTotais);
 			String rendimento = String.format("%.2f", x*100.0);
