@@ -12,13 +12,13 @@ import sx.blah.discord.handle.obj.IMessage;
 import sx.blah.discord.handle.obj.IUser;
 
 public class jDescubraLol {
-//	dbManager db;
-	String Resposta, playerId, guildaId;
+	String Resposta; 
+	String playerId, guildaId;
 	boolean prepared = false, jogando = true;
 	DescubraLol Instancia;
 	IChannel Channel;
 	int currentLevel;
-	//ArrayList<IMessage> mensagens = new ArrayList<IMessage>();
+	int tentativasTotais, tentativasLocais = 0, tentativasDaSessao = 0, championIniciado;
 	IMessage ultimoChampion;
 	
 	public jDescubraLol(IMessage msg, DescubraLol i){
@@ -26,15 +26,29 @@ public class jDescubraLol {
 		Channel = msg.getChannel();
 		playerId = msg.getAuthor().getID();
 		guildaId = msg.getGuild().getID();
+		tentativasTotais = dbManager.loadInt(playerId, "descubraLol_progresso", "tentativas");
+		currentLevel = dbManager.loadInt(playerId, "descubraLol_progresso", "currentLevel");
+		championIniciado = currentLevel;
 		
 		if(!dbManager.existeRegistro(playerId, "descubraLol_progresso", "id"))
 			dbManager.criarJogo(playerId, "descubraLol_progresso");
 		
-		currentLevel = dbManager.loadGame(playerId, "descubraLol_progresso");
-		dbManager.criarInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
+		dbManager.criarInstancia(playerId, guildaId, "descubraLol_instancias");
 		
-		if(currentLevel == 0){
+		if(currentLevel == 0)
 			MensageHandler.enviarMsgEstilizada("Descubra o campeão", "Bem-vindo! Seu objetivo é adivinhar qual o personagem do League of Legends o bot quis representar a partir de emojis padrões do Discord.", Color.YELLOW, msg);
+		
+		double maxChampionId = dbManager.getMaxValue("descubraLol_champions", "id");
+		if (currentLevel == maxChampionId){
+			ModestoBot.Bot.getDispatcher().unregisterListener(this);
+			double x = (maxChampionId/tentativasTotais);
+			String rendimento = String.format("%.2f", x*100.0);
+			MensageHandler.enviarMsgEstilizada("@"+msg.getAuthor().getName(), 
+			"Você já completou o jogo. Aguarde mais atualizações! \n " + 
+			"Seu rendimento foi de " + rendimento +"%", 
+			Color.WHITE, Channel);
+			Instancia.quitarJogo(playerId, guildaId);
+			return;
 		}
 		
 		mostrarNivel(msg.getAuthor());
@@ -43,6 +57,11 @@ public class jDescubraLol {
 	private void mostrarNivel(IUser usuario) {
 		if(ultimoChampion != null)
 			MensageHandler.excluirMensagem(ultimoChampion);
+		if (currentLevel == dbManager.getMaxValue("descubraLol_champions", "id")){
+			MensageHandler.enviarMsgEstilizada("Parabéns @"+usuario.getName()+"!", "Você completou o jogo! Aguarde mais atualizações!", Color.WHITE, Channel);
+			Instancia.quitarJogo(playerId, guildaId);
+			return;
+		}
 		if(jogando){
 			Resposta = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "nome");
 			String representacao = dbManager.pesquisarString(currentLevel, "descubraLol_champions", "representacao");
@@ -53,6 +72,7 @@ public class jDescubraLol {
 	
 	private void checarPalpite(String Palpite, IUser usuario){
 		prepared = false;
+		System.out.println(tentativasLocais);
 		if(Palpite.toLowerCase().equals(Resposta)){
 			Thread t = new Thread(new Runnable() {
 				@Override
@@ -71,8 +91,13 @@ public class jDescubraLol {
 			    }
 			});
 			t.start();
+			if(tentativasLocais == 5)
+				MensageHandler.enviarMsgEstilizada("Dica", dbManager.pesquisarString(currentLevel, "descubraLol_champions", "dica"), Color.BLUE, Channel);
 			prepared = true;
 		}
+		
+		tentativasLocais++;
+		tentativasDaSessao++;
 	}
 	
 	private void passarNivel(){
@@ -104,6 +129,20 @@ public class jDescubraLol {
 			if(msg.getContent().split(" ").length > 1){
 				if (msg.getContent().substring(4).equals("quit")){
 					Instancia.quitarJogo(playerId, guildaId);
+					Thread t = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							double x = currentLevel-championIniciado;
+							double y = x/tentativasDaSessao;
+							String rendimento = String.format("%.2f", y*100);
+					    	MensageHandler.enviarMsgEstilizada("Encerrado com sucesso.", "Seu rendimento 'champion/tentativa' foi de " + rendimento + "%", Color.WHITE, Channel, 4000);
+					    }
+					});
+					if(tentativasDaSessao > 0)
+						t.start();
+					else{
+						MensageHandler.enviarMensagem("Jogo encerrado com sucesso!", Channel);
+					}
 					ModestoBot.Bot.getDispatcher().unregisterListener(this);
 					return;
 			}
@@ -112,12 +151,14 @@ public class jDescubraLol {
 				return;
 				}
 			}
+			return;
 		}
+		
 		if(!jogando)
 			return;
 		if(!prepared)
 			return;
-		
+	
 		String palpite = msg.getContent();
 		IUser autor = msg.getAuthor();
 		checarPalpite(palpite, autor);
@@ -125,7 +166,10 @@ public class jDescubraLol {
 	}
 	///
 	public void salvarJogo(){
-		dbManager.setInt(playerId, "descubraLol_progresso", "currentLevel", currentLevel);
+		dbManager.setInteger(playerId, "descubraLol_progresso", "currentLevel", currentLevel);
+		tentativasTotais = tentativasTotais+tentativasLocais;
+		dbManager.setInteger(playerId, "descubraLol_progresso", "tentativas", tentativasTotais);
+		tentativasLocais = 0;
 	}
 
 	public boolean isJogando() {

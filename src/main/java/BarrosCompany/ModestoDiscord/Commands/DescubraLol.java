@@ -12,9 +12,10 @@ import sx.blah.discord.handle.obj.IMessage;
 public class DescubraLol implements IComando, IJogo {
 	
 	public void Executar(IMessage msg) {
+		String playerId = msg.getAuthor().getID(), guildaId = msg.getGuild().getID();
 		if(msg.getContent().split(" ").length > 1)
 			return;
-		if(!dbManager.existeInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias")){
+		if(!dbManager.existeInstancia(playerId, guildaId, "descubraLol_instancias")){
 			ModestoBot.Bot.getDispatcher().registerListener(new jDescubraLol(msg, this));
 		}else{
 			MensageHandler.enviarMensagem("Erro, jogo já existe!", msg);
@@ -23,12 +24,12 @@ public class DescubraLol implements IComando, IJogo {
 	}
 	
 	public void quitarJogo(IMessage msg, jDescubraLol object){
+		String playerId = msg.getAuthor().getID(), guildaId = msg.getGuild().getID();
 		object.setJogando(false);
-		dbManager.excluirInstancia(msg.getAuthor().getID(), msg.getGuild().getID(), "descubraLol_instancias");
+		dbManager.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
 	}
 	
 	public void quitarJogo(String playerId, String guildaId){
 		dbManager.excluirInstancia(playerId, guildaId, "descubraLol_instancias");
-		
 	}
 }

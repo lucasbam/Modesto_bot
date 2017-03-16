@@ -32,12 +32,12 @@ public class dbManager {
 		return "";
 	}
 	
-	public void setInt(int id, String tabela, String coluna, int i){
+	public void setInt(String id, String tabela, String coluna, int i){
 		String query = "UPDATE " + tabela + " SET " + coluna + "=" + i + " WHERE id = ?";
 		PreparedStatement stmt;
 		try {
 			stmt = con.prepareStatement(query);
-			stmt.setInt(1, id);
+			stmt.setString(1, id);
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException e) {
@@ -45,7 +45,7 @@ public class dbManager {
 		}
 	}
 	
-	public static void setInt(String id, String tabela, String coluna, int i){
+	public static void setInteger(String id, String tabela, String coluna, int i){
 		String query = "UPDATE " + tabela + " SET " + coluna + "=" + i + " WHERE id = ?";
 		PreparedStatement stmt;
 		try {
@@ -130,7 +130,7 @@ public class dbManager {
 		}
 	}
 
-	public static int loadGame(String playerId, String tabela){
+	public static int loadInt(String playerId, String tabela, String tipo){
 		System.out.println("Tá chegando no load!");
 		String query = "SELECT * FROM "+ tabela +" WHERE id = ?";
 		PreparedStatement stmt;
@@ -139,7 +139,22 @@ public class dbManager {
 			stmt.setString(1, playerId);
 			ResultSet rs = stmt.executeQuery();
 			rs.next();
-			return rs.getInt("currentLevel");
+			return rs.getInt(tipo);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+	
+	public static int getMaxValue(String tabela, String coluna){
+		String query = "SELECT MAX" +"("+coluna+")"+" AS"+ " maxId" + " FROM "+ tabela;
+		PreparedStatement stmt;
+		try {
+			stmt = con.prepareStatement(query);
+			ResultSet rs = stmt.executeQuery();
+			rs.next();
+			return rs.getInt("maxId");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

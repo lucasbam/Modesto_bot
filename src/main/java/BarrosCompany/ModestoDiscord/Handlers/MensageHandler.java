@@ -65,16 +65,6 @@ public class MensageHandler {
 		} catch (MissingPermissionsException e1) {
 			e1.printStackTrace();
 		}
-//		RequestBuffer.request(() -> {
-//			try{
-//				System.out.println("antes do return");
-//				return new MessageBuilder(ModestoBot.Bot).withChannel(ch).withEmbed(eb).build();
-//			}catch(Exception e){
-//				e.printStackTrace();
-//			}
-//			return null;
-//		});
-//		return null;
 		return null;
 	}
 	public static IMessage enviarMsgEstilizada(String titulo, String corpo, Color cor, IChannel ch, int delay){
