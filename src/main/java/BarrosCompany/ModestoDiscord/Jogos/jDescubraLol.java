@@ -41,11 +41,9 @@ public class jDescubraLol {
 		double maxChampionId = dbManager.getMaxValue("descubraLol_champions", "id");
 		if (currentLevel > maxChampionId){
 			ModestoBot.Bot.getDispatcher().unregisterListener(this);
-			double x = (maxChampionId/tentativasTotais);
-			String rendimento = String.format("%.2f", x*100.0);
 			MensageHandler.enviarMsgEstilizada("@"+msg.getAuthor().getName(), 
 			"Você já completou o jogo. Aguarde mais atualizações! \n " + 
-			"Seu rendimento foi de " + rendimento +"%", 
+			"Você teve "+tentativasTotais+" tentativas para o total de " + maxChampionId+1 + " campeões" , 
 			Color.WHITE, Channel);
 			Instancia.quitarJogo(playerId, guildaId);
 			return;
@@ -57,9 +55,11 @@ public class jDescubraLol {
 	private void mostrarNivel(IUser usuario) {
 		if(ultimoChampion != null)
 			MensageHandler.excluirMensagem(ultimoChampion);
-		if (currentLevel == dbManager.getMaxValue("descubraLol_champions", "id")){
+		if (currentLevel > dbManager.getMaxValue("descubraLol_champions", "id")){
 			MensageHandler.enviarMsgEstilizada("Parabéns @"+usuario.getName()+"!", "Você completou o jogo! Aguarde mais atualizações!", Color.WHITE, Channel);
 			Instancia.quitarJogo(playerId, guildaId);
+			jogando = false;
+			prepared = false;
 			return;
 		}
 		if(jogando){
@@ -133,9 +133,7 @@ public class jDescubraLol {
 						@Override
 						public void run() {
 							double x = currentLevel-championIniciado;
-							double y = x/tentativasDaSessao;
-							String rendimento = String.format("%.2f", y*100);
-					    	MensageHandler.enviarMsgEstilizada("Encerrado com sucesso.", "Seu rendimento 'champion/tentativa' foi de " + rendimento + "%", Color.WHITE, Channel, 4000);
+					    	MensageHandler.enviarMsgEstilizada("Encerrado com sucesso.", "Você tentou " + tentativasDaSessao + " palpites e acertou" + x + " campeões.", Color.WHITE, Channel, 4000);
 					    }
 					});
 					if(tentativasDaSessao > 0)
