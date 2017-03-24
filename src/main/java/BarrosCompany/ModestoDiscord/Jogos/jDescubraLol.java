@@ -43,7 +43,7 @@ public class jDescubraLol {
 			ModestoBot.Bot.getDispatcher().unregisterListener(this);
 			MensageHandler.enviarMsgEstilizada("@"+msg.getAuthor().getName(), 
 			"Você já completou o jogo. Aguarde mais atualizações! \n " + 
-			"Você teve "+tentativasTotais+" tentativas para o total de " + maxChampionId + " campeões" , 
+			"Você teve "+tentativasTotais+" tentativas para o total de " + maxChampionId+1 + " campeões" , 
 			Color.WHITE, Channel);
 			Instancia.quitarJogo(playerId, guildaId);
 			return;
