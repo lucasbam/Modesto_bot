@@ -9,7 +9,7 @@ import sx.blah.discord.handle.obj.Status;
 import sx.blah.discord.util.DiscordException;
 
 public class ModestoBot {
-	static String Token = "MjgxNTcwNjc3Mjk4MDM2NzM2.C7YEWg.1IXdzWvXwxo2oqPO2_ArF7bBQ5Y";
+	static String Token = "Mjk0NjM3MzA0NDQwNjg0NTQ2.C7YCNw.eEMoyRHGWw5R9PIur-VhveeyqSk";
 	
 	public static IDiscordClient Bot;
 
