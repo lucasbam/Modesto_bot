@@ -26,12 +26,13 @@ public class jDescubraLol {
 		Channel = msg.getChannel();
 		playerId = msg.getAuthor().getID();
 		guildaId = msg.getGuild().getID();
-		tentativasTotais = dbManager.loadInt(playerId, "descubraLol_progresso", "tentativas");
-		currentLevel = dbManager.loadInt(playerId, "descubraLol_progresso", "currentLevel");
-		championIniciado = currentLevel;
 		
 		if(!dbManager.existeRegistro(playerId, "descubraLol_progresso", "id"))
 			dbManager.criarJogo(playerId, "descubraLol_progresso");
+		
+		tentativasTotais = dbManager.loadInt(playerId, "descubraLol_progresso", "tentativas");
+		currentLevel = dbManager.loadInt(playerId, "descubraLol_progresso", "currentLevel");
+		championIniciado = currentLevel;
 		
 		dbManager.criarInstancia(playerId, guildaId, "descubraLol_instancias");
 		
