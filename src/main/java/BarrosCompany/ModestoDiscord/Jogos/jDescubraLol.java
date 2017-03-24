@@ -27,8 +27,10 @@ public class jDescubraLol {
 		playerId = msg.getAuthor().getID();
 		guildaId = msg.getGuild().getID();
 		
-		if(!dbManager.existeRegistro(playerId, "descubraLol_progresso", "id"))
+		if(!dbManager.existeRegistro(playerId, "descubraLol_progresso", "id")){
 			dbManager.criarJogo(playerId, "descubraLol_progresso");
+			System.out.println("nao tem registro e era pra ter criado");
+		}
 		
 		tentativasTotais = dbManager.loadInt(playerId, "descubraLol_progresso", "tentativas");
 		currentLevel = dbManager.loadInt(playerId, "descubraLol_progresso", "currentLevel");
